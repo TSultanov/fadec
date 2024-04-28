@@ -5,14 +5,11 @@
 
 #include <fadec.h>
 
+#include "likely.h"
 
 #ifdef __GNUC__
-#define LIKELY(x) __builtin_expect((x), 1)
-#define UNLIKELY(x) __builtin_expect((x), 0)
 #define ASSUME(x) do { if (!(x)) __builtin_unreachable(); } while (0)
 #else
-#define LIKELY(x) (x)
-#define UNLIKELY(x) (x)
 #define ASSUME(x) ((void) 0)
 #endif
 

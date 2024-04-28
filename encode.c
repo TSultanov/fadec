@@ -5,14 +5,8 @@
 
 #include <fadec-enc.h>
 
+#include "likely.h"
 
-#ifdef __GNUC__
-#define LIKELY(x) __builtin_expect((x), 1)
-#define UNLIKELY(x) __builtin_expect((x), 0)
-#else
-#define LIKELY(x) (x)
-#define UNLIKELY(x) (x)
-#endif
 
 #define OPC_66 0x80000
 #define OPC_F2 0x100000

@@ -2,21 +2,19 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <limits.h>
 #ifdef _MSC_VER
 #include <intrin.h>
 #endif
 
 #include <fadec.h>
 
+#include "likely.h"
 
 #ifdef __GNUC__
-#define LIKELY(x) __builtin_expect((x), 1)
-#define UNLIKELY(x) __builtin_expect((x), 0)
 #define DECLARE_ARRAY_SIZE(n) static n
 #define DECLARE_RESTRICTED_ARRAY_SIZE(n) restrict static n
 #else
-#define LIKELY(x) (x)
-#define UNLIKELY(x) (x)
 #define DECLARE_ARRAY_SIZE(n) n
 #define DECLARE_RESTRICTED_ARRAY_SIZE(n) n
 #endif
@@ -44,7 +42,7 @@ fd_strpcat(char* restrict dst, struct FdStr src) {
 static unsigned
 fd_clz64(uint64_t v) {
 #if defined(__GNUC__)
-#if INTPTR_MAX == INT64_MAX
+#if (INTPTR_MAX == INT64_MAX) && !defined(_WIN32)
     return __builtin_clzl(v);
 #else
     if (v <= 0xffffffff)
